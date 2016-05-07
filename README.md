@@ -7,7 +7,7 @@ common Node.js libraries.
 
 Currently supports:
 
-- http server / express
+- [http server / express](#stophttpserverhttpserver)
 - send PR for more!
 
 ## Install
