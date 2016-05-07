@@ -58,16 +58,16 @@ Default values if `shutdown` is `true`:
 }
 ```
 
-### shutdownHandler(opts)
+### Shutdown Handlers
 
-Handlers are Promise-returning functions which take the following options object:
+**shutdownHandler(opts)**
+
+Handlers are Promise-returning functions which accept the following options object:
 
 - **opts.log** and **opts.logError**: same as above
 - **opts.forceful**: `true` if we want to shutdown as quick as possible (defaults to `false`).
     For example, the http server handle doesn't wait for connections to
     close if this is true.
-
-### Shutdown Handlers
 
 The following functions return shutdown handlers for common Node.js
 libraries/modules.
