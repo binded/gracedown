@@ -25,7 +25,7 @@ Returns a function which can be called to gracefully shutdown your application.
 The returned function doesn't call `process.exit` or output any text by
 default, unless `opts.shutdown` is set to true.
 
-- **handlers**: array of shutdown functions
+- **handlers**: array of [shutdown handlers](#shutdown-handlers)
 - **opts.shutdown**: if true, changes default option values (defaults to `false`)
 - **opts.timeout**: timeout in ms before forceful shutdown (defaults to `10000`)
 - **opts.log**: logging function
