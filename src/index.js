@@ -1,19 +1,38 @@
 /* eslint-disable no-console */
+const noop = () => {}
 const defaults = {
-  log: console.log.bind(console),
-  logError: console.error.bind(console),
-  exit: () => process.exit(),
-  exitError: () => process.exit(1),
-  timeout: 10000,
+  stop: {
+    timeout: 10000,
+    log: noop,
+    logError: noop,
+    exit: noop,
+    exitError: noop,
+  },
+  shutdown: {
+    timeout: 10000,
+    log: console.log.bind(console),
+    logError: console.error.bind(console),
+    exit: () => process.exit(),
+    exitError: () => process.exit(1),
+  },
 }
 
-export default (handlers = [], {
-  timeout = defaults.timeout,
-  log = defaults.log,
-  logError = defaults.logError,
-  exit = defaults.exit,
-  exitError = defaults.exitError,
-} = {}) => {
+export default (handlers = [], opts = {}) => {
+  const actualOpts = opts.shutdown ? {
+    ...defaults.shutdown,
+    ...opts,
+  } : {
+    ...defaults.stop,
+    ...opts,
+  }
+  const {
+    timeout,
+    log,
+    logError,
+    exit,
+    exitError,
+  } = actualOpts
+
   let shutdownInProgress = false
   let forceExited = false
   let forcefulExitTimer
@@ -45,7 +64,7 @@ export default (handlers = [], {
         // FIXME: es6 doesn't support canceling promises :(
         if (forceExited) return
         clearTimeout(forcefulExitTimer)
-        exit()
+        return exit()
       })
       .catch(handleError)
   )
@@ -71,11 +90,12 @@ export default (handlers = [], {
 }
 
 export const stopHttpServer = (httpServer) => ({
-  log = () => {},
+  log = noop,
   forceful = false,
 } = {}) => (
   new Promise((resolve, reject) => {
     if (forceful) {
+      // TODO: keep track of new connections and destroy them
       return httpServer.close((err) => {
         if (err) return reject(err)
         resolve()
@@ -86,6 +106,7 @@ export const stopHttpServer = (httpServer) => ({
       if (count) {
         log(`Waiting for ${count} connection(s) to close`)
       }
+      // Wait for connections to close...
       httpServer.close((_err) => {
         if (_err) return reject(_err)
         resolve()

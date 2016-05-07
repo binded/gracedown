@@ -20,15 +20,43 @@ npm install --save gracedown
 
 ### gracedown(handlers, [, opts])
 
-Returns a function which can be used with `process.on('SIGTERM', fn)` and `process.on('SIGINT', fn)`.
+Returns a function which can be called to gracefully shutdown your application.
+
+The returned function doesn't call `process.exit` or output any text by
+default, unless `opts.shutdown` is set to true.
 
 - **handlers**: array of shutdown functions
-- **opts**: configuration object
-- **opts.timeout**: timeout in ms before forceful shutdown with exit code 1 (defaults to 10000)
-- **opts.log**: logging function (defaults to `console.log`)
-- **opts.logError**: logging function for errors (defaults to `console.error`)
-- **opts.exit**: exit function (defaults to `process.exit()`)
-- **opts.exitError**: exit function (defaults to `process.exit(1)`)
+- **opts.shutdown**: if true, changes default option values (defaults to `false`)
+- **opts.timeout**: timeout in ms before forceful shutdown (defaults to `10000`)
+- **opts.log**: logging function
+- **opts.logError**: logging function for errors
+- **opts.exit**: exit function
+- **opts.exitError**: exit function on error
+
+Default values if `shutdown` is `false`:
+
+```javascript
+// where noop = () => {}
+{
+  timeout: 10000,
+  log: noop,
+  logError: noop,
+  exit: noop,
+  exitError: noop,
+}
+```
+
+Default values if `shutdown` is `true`:
+
+```javascript
+{
+  timeout: 10000,
+  log: console.log.bind(console),
+  logError: console.error.bind(console),
+  exit: () => process.exit(),
+  exitError: () => process.exit(1),
+}
+```
 
 ### shutdownHandler(opts)
 
@@ -67,7 +95,7 @@ const shutdown = gracedown([
   () => {
     clearTimeout(someTimeout)
   }
-], { timeout: 5000 })
+], { timeout: 5000, shutdown: true })
 
 process.on('SIGTERM', shutdown)
 process.on('SIGINT', shutdown)
