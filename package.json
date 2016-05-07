@@ -1,6 +1,6 @@
 {
   "name": "gracedown",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Graceful shutdown, batteries included.",
   "main": "lib/index.js",
   "scripts": {
