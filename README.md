@@ -74,7 +74,7 @@ libraries/modules.
 
 #### stopHttpServer(httpServer)
 
-**httpServer**: Node.js http server instance
+- **httpServer**: Node.js http server instance
 
 ## Example
 
