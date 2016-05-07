@@ -25,9 +25,24 @@ Returns a function which can be used with `process.on('SIGTERM', fn)` and `proce
 - **handlers**: array of shutdown functions
 - **opts**: configuration object
 - **opts.timeout**: timeout in ms before forceful shutdown with exit code 1 (defaults to 10000)
-- **opts.log**: logging function (defaults to console.log)
+- **opts.log**: logging function (defaults to `console.log`)
+- **opts.logError**: logging function for errors (defaults to `console.error`)
+- **opts.exit**: exit function (defaults to `process.exit()`)
+- **opts.exitError**: exit function (defaults to `process.exit(1)`)
 
-### Shutdown handlers
+### shutdownHandler(opts)
+
+Handlers are Promise-returning functions which take the following options object:
+
+- **opts.log** and **opts.logError**: same as above
+- **opts.forceful**: `true` if we want to shutdown as quick as possible (defaults to `false`).
+    For example, the http server handle doesn't wait for connections to
+    close if this is true.
+
+### Shutdown Handlers
+
+The following functions return shutdown handlers for common Node.js
+libraries/modules.
 
 #### stopHttpServer(httpServer)
 
