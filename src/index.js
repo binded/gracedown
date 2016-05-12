@@ -115,3 +115,4 @@ export const stopHttpServer = (httpServer) => ({
   })
 )
 
+export const stopKnex = (knex) => () => knex.destroy()

@@ -8,6 +8,7 @@ common Node.js libraries.
 Currently supports:
 
 - [http server / express](#stophttpserverhttpserver)
+- [knex](#stopknexknex)
 - send PR for more!
 
 ## Install
@@ -75,6 +76,10 @@ libraries/modules.
 #### stopHttpServer(httpServer)
 
 - **httpServer**: Node.js http server instance
+
+#### stopKnex(knex)
+
+- **knex**: [Knex.js](http://knexjs.org/) object
 
 ## Example
 
